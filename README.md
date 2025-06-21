@@ -75,10 +75,11 @@ After running dockncrypt init, you’ll get:
 ├── Dockerfile                 # Backend Dockerfile
 ├── docker-compose.yml         # Main orchestrator
 ├── nginx/
+│  ├── Dockerfile             # 
 │   └── nginx.conf             # HTTPS reverse proxy config
 ├── nginx-certbot/
 │   ├── Dockerfile             # Lightweight nginx for ACME challenge
-│   └── nginx.conf
+│   └── nginx-certbot.conf
 └── .dockncrypt.json           # Internal config store (email/domain)
 ```
 
