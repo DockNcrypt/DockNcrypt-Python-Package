@@ -13,7 +13,7 @@ def scaffold(email, domain, endpoint):
     render_templates(domain, email, endpoint, dst)
     save_config(email, domain, endpoint)
     print("✅ Project initialized.")
-    print("➡️Please make sure you have your backend dockerfile in cwd!")
+    print("➡️ Please make sure you have your service's dockerfile in cwd!")
 
 def run_compose(detached, rebuild):
     assert_docker()

@@ -13,7 +13,7 @@ app = typer.Typer(help="🔐 Dockncrypt: Automate HTTPS setup with Docker, Nginx
 def init():
     domain = typer.prompt("Enter domain name")
     email = typer.prompt("Enter email address")
-    endpoint = typer.prompt("Enter backend endpoint")
+    endpoint = typer.prompt("Enter service endpoint")
     temp_endpoint = endpoint.split('/')
     endpoint = ""
     for url in temp_endpoint:
