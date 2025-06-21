@@ -15,10 +15,11 @@ def init():
     email = typer.prompt("Enter email address")
     endpoint = typer.prompt("Enter backend endpoint: ")
     temp_endpoint = endpoint.split('/')
-    endpoint = "/"
+    endpoint = ""
     for url in temp_endpoint:
-        endpoint+=url
-        endpoint+='/'
+        if url != "":
+            endpoint+=url
+            endpoint+='/'
     scaffold_project(email, domain, endpoint)
 
 @app.command("run", help="🚀 Run all services using docker compose. Use --detach to run in background.")

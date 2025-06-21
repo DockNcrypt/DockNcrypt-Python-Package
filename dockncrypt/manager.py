@@ -49,10 +49,11 @@ def edit_config():
     domain = input(f"Enter domain [{config['domain']}]: ") or config["domain"]
     endpoint = input(f"Enter endpoint [{config['endpoint']}]: ") or config["endpoint"]
     temp_endpoint = endpoint.split('/')
-    endpoint = "/"
+    endpoint = ""
     for url in temp_endpoint:
-        endpoint+=url
-        endpoint+='/'
+        if url != "":
+            endpoint+=url
+            endpoint+='/'
     render_templates(domain, email, endpoint, os.getcwd())
     save_config(email, domain, endpoint)
     print("✅ Configuration updated.")
