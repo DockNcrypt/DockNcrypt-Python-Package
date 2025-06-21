@@ -22,7 +22,7 @@ def init():
             endpoint+='/'
     scaffold(email, domain, endpoint)
 
-@app.command("run", help="🚀 Run all services using docker compose. Use --detach to run in background.")
+@app.command("run", help="🚀 Run all services using docker compose. Use --detach or -d to run in background. Use --build or -b to rebuild containers after editing")
 def run(
     detach: bool = typer.Option(False, "--detach", "-d", help="Run in detached (background) mode"),
     build: bool = typer.Option(False, "--build", "-b", help="Rebuild Docker images before starting")
