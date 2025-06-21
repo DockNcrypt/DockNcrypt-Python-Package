@@ -1,6 +1,6 @@
 import typer
 from .manager import (
-    scaffold_project,
+    scaffold,
     run_compose,
     stop_compose,
     clear_volumes,
@@ -20,7 +20,7 @@ def init():
         if url != "":
             endpoint+=url
             endpoint+='/'
-    scaffold_project(email, domain, endpoint)
+    scaffold(email, domain, endpoint)
 
 @app.command("run", help="🚀 Run all services using docker compose. Use --detach to run in background.")
 def run(detach: bool = typer.Option(False, "--detach", "-d", help="Run in detached (background) mode")):
