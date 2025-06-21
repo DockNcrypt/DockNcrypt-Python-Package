@@ -47,16 +47,25 @@ def clear_volumes():
         print(f"⚠️ Could not remove one or both volumes: {volume_1}, {volume_2}. They may not exist.")
 
 def edit_config():
-    config = load_config()
-    email = input(f"Enter email [{config['email']}]: ") or config["email"]
-    domain = input(f"Enter domain [{config['domain']}]: ") or config["domain"]
-    endpoint = input(f"Enter endpoint [{config['endpoint']}]: ") or config["endpoint"]
-    temp_endpoint = endpoint.split('/')
-    endpoint = ""
-    for url in temp_endpoint:
-        if url != "":
-            endpoint+=url
-            endpoint+='/'
-    render_templates(domain, email, endpoint, os.getcwd())
-    save_config(email, domain, endpoint)
-    print("✅ Configuration updated.")
+    choice = input("🚨 Edit will not change particular file if any prior manual changes have been made.\n " \
+    "If you want to enable editing again for all run init\n " \
+    "do you wish to continue to edit? (y/n)")
+    if choice=='y':
+        config = load_config()
+        email = input(f"Enter email [{config['email']}]: ") or config["email"]
+        domain = input(f"Enter domain [{config['domain']}]: ") or config["domain"]
+        endpoint = input(f"Enter endpoint [{config['endpoint']}]: ") or config["endpoint"]
+        temp_endpoint = endpoint.split('/')
+        endpoint = ""
+        for url in temp_endpoint:
+            if url != "":
+                endpoint+=url
+                endpoint+='/'
+        render_templates(domain, email, endpoint, os.getcwd())
+        save_config(email, domain, endpoint)
+        print("✅ Configuration updated.")
+        print("➡️ Please run with build flag to apply the changes!")
+    elif choice=='n':
+        print("➡️ Please always run with build flag to apply the manual changes!")
+    else:
+        print("Invalid choice.")

@@ -9,7 +9,7 @@ from .manager import (
 
 app = typer.Typer(help="🔐 Dockncrypt: Automate HTTPS setup with Docker, Nginx, and Certbot.")
 
-@app.command("init", help="🛠️  Scaffold the project with your domain and email.")
+@app.command("init", help="🛠️  Scaffold the project with your domain and email. Can be used to reset your setup if needed.")
 def init():
     domain = typer.prompt("Enter domain name")
     email = typer.prompt("Enter email address")
