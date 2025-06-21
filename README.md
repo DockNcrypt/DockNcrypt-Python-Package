@@ -105,7 +105,14 @@ Open ports 80 and 443
 ## 📝 License
 MIT License
 
-Made by Samir Wankhede
-[(samirwankhde.in)](https://samirwankhede.in)
+## 🌐 Connect
+
+**Project Repo** 👉 [github.com/DockNcrypt/DockNcrypt](https://github.com/DockNcrypt/DockNcrypt)
+
+**Creator** 👉 [samirwankhede.in](https://samirwankhede.in)
+
+**Python Package** 👉 [github.com/DockNcrypt/DockNcrypt-Python-Package](https://github.com/DockNcrypt/DockNcrypt-Python-Package)
+
+---
 
 
