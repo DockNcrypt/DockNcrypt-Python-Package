@@ -1,29 +1,41 @@
 import typer
-from .manager import scaffold, run, stop, clear, edit
+from .manager import (
+    scaffold_project,
+    run_compose,
+    stop_compose,
+    clear_volumes,
+    edit_config
+)
 
-app = typer.Typer()
+app = typer.Typer(help="🔐 Dockncrypt: Automate HTTPS setup with Docker, Nginx, and Certbot.")
 
-@app.command()
+@app.command("init", help="🛠️  Scaffold the project with your domain and email.")
 def init():
     domain = typer.prompt("Enter domain name")
     email = typer.prompt("Enter email address")
-    scaffold(email, domain)
+    endpoint = typer.prompt("Enter backend endpoint: ")
+    temp_endpoint = endpoint.split('/')
+    endpoint = "/"
+    for url in temp_endpoint:
+        endpoint+=url
+        endpoint+='/'
+    scaffold_project(email, domain, endpoint)
 
-@app.command()
-def run_():
-    run()
+@app.command("run", help="🚀 Run all services using docker compose. Use --detach to run in background.")
+def run(detach: bool = typer.Option(False, "--detach", "-d", help="Run in detached (background) mode")):
+    run_compose(detached=detach)
 
-@app.command()
+@app.command("stop", help="🧯 Stop all running containers using docker compose down.")
 def stop():
-    stop()
+    stop_compose()
 
-@app.command()
+@app.command("clear", help="🧹 Remove certbot and letsencrypt volumes (safe to recreate certs).")
 def clear():
-    clear()
+    clear_volumes()
 
-@app.command()
+@app.command("edit", help="✏️  Reconfigure domain/email and regenerate Nginx/Certbot templates.")
 def edit():
-    edit()
+    edit_config()
 
 if __name__ == "__main__":
     app()

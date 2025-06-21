@@ -5,31 +5,54 @@ from .templater import render_templates
 from .storage import save_config, load_config
 from .check_docker import assert_docker
 
-def scaffold(email, domain):
+def scaffold(email, domain, endpoint):
     assert_docker()
     dst = os.getcwd()
     template_dir = os.path.join(os.path.dirname(__file__), "templates")
     shutil.copytree(template_dir, dst, dirs_exist_ok=True, ignore=shutil.ignore_patterns("*.j2"))
-    render_templates(domain, email, dst)
-    save_config(email, domain)
+    render_templates(domain, email, endpoint, dst)
+    save_config(email, domain, endpoint)
     print("✅ Project initialized.")
 
-def run():
+def run_compose(detached):
     assert_docker()
-    subprocess.run(["docker", "compose", "up"])
+    cmd = ["docker", "compose", "up"]
+    if detached:
+        cmd.append("-d")
+    try:
+        subprocess.run(cmd, check=True)
+    except subprocess.CalledProcessError:
+        print("❌ Failed to run docker compose up.")
 
-def stop():
+def stop_compose():
     assert_docker()
-    subprocess.run(["docker", "compose", "down"])
+    try:
+        subprocess.run(["docker", "compose", "down"], check=True)
+    except subprocess.CalledProcessError:
+        print("❌ Failed to stop containers.")
 
-def clear():
+def clear_volumes():
     assert_docker()
-    subprocess.run(["docker", "volume", "rm", "dockncrypt_certbot_challenges", "dockncrypt_letsencrypt"])
+    project_name = os.path.basename(os.getcwd())
+    volume_1 = f"{project_name}_certbot_challenges"
+    volume_2 = f"{project_name}_letsencrypt"
 
-def edit():
+    try:
+        subprocess.run(["docker", "volume", "rm", volume_1, volume_2], check=True)
+        print(f"✅ Removed volumes storing certificates: {volume_1}, {volume_2}")
+    except subprocess.CalledProcessError:
+        print(f"⚠️ Could not remove one or both volumes: {volume_1}, {volume_2}. They may not exist.")
+
+def edit_config():
     config = load_config()
     email = input(f"Enter email [{config['email']}]: ") or config["email"]
     domain = input(f"Enter domain [{config['domain']}]: ") or config["domain"]
-    render_templates(domain, email, os.getcwd())
-    save_config(email, domain)
+    endpoint = input(f"Enter endpoint [{config['endpoint']}]: ") or config["endpoint"]
+    temp_endpoint = endpoint.split('/')
+    endpoint = "/"
+    for url in temp_endpoint:
+        endpoint+=url
+        endpoint+='/'
+    render_templates(domain, email, endpoint, os.getcwd())
+    save_config(email, domain, endpoint)
     print("✅ Configuration updated.")
