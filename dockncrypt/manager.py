@@ -10,7 +10,7 @@ def scaffold(email, domain, endpoint):
     dst = os.getcwd()
     template_dir = os.path.join(os.path.dirname(__file__), "templates")
     shutil.copytree(template_dir, dst, dirs_exist_ok=True, ignore=shutil.ignore_patterns("*.j2"))
-    render_templates(domain, email, endpoint, dst)
+    render_templates(domain, email, endpoint, dst, True)
     save_config(email, domain, endpoint)
     print("✅ Project initialized.")
     print("➡️ Please make sure you have your service's dockerfile in cwd!")
@@ -61,7 +61,7 @@ def edit_config():
             if url != "":
                 endpoint+=url
                 endpoint+='/'
-        render_templates(domain, email, endpoint, os.getcwd())
+        render_templates(domain, email, endpoint, os.getcwd(), False)
         save_config(email, domain, endpoint)
         print("✅ Configuration updated.")
         print("➡️ Please run with build flag to apply the changes!")
