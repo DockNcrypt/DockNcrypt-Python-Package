@@ -13,7 +13,7 @@ app = typer.Typer(help="🔐 Dockncrypt: Automate HTTPS setup with Docker, Nginx
 def init():
     domain = typer.prompt("Enter domain name")
     email = typer.prompt("Enter email address")
-    endpoint = typer.prompt("Enter backend endpoint: ")
+    endpoint = typer.prompt("Enter backend endpoint")
     temp_endpoint = endpoint.split('/')
     endpoint = ""
     for url in temp_endpoint:
@@ -23,8 +23,11 @@ def init():
     scaffold(email, domain, endpoint)
 
 @app.command("run", help="🚀 Run all services using docker compose. Use --detach to run in background.")
-def run(detach: bool = typer.Option(False, "--detach", "-d", help="Run in detached (background) mode")):
-    run_compose(detached=detach)
+def run(
+    detach: bool = typer.Option(False, "--detach", "-d", help="Run in detached (background) mode"),
+    build: bool = typer.Option(False, "--build", "-b", help="Rebuild Docker images before starting")
+):
+    run_compose(detached=detach, rebuild=build)
 
 @app.command("stop", help="🧯 Stop all running containers using docker compose down.")
 def stop():

@@ -14,9 +14,11 @@ def scaffold(email, domain, endpoint):
     save_config(email, domain, endpoint)
     print("✅ Project initialized.")
 
-def run_compose(detached):
+def run_compose(detached, rebuild):
     assert_docker()
     cmd = ["docker", "compose", "up"]
+    if rebuild:
+        cmd.append("--build")
     if detached:
         cmd.append("-d")
     try:
