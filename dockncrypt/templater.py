@@ -1,12 +1,11 @@
 from jinja2 import Environment, FileSystemLoader
-import hashlib
 import os
 
-def file_checksum(path):
+def is_dockncrypt_template(path):
     if not os.path.exists(path):
-        return None
-    with open(path, "rb") as f:
-        return hashlib.sha256(f.read()).hexdigest()
+        return True
+    with open(path, "r") as f:
+        return "# dockncrypt-template-signature: do-not-edit" in f.readline()
 
 def render_templates(domain, email, endpoint, dst_dir, force_overwrite=False):
     env = Environment(loader=FileSystemLoader(os.path.join(os.path.dirname(__file__), 'templates')))
@@ -14,16 +13,14 @@ def render_templates(domain, email, endpoint, dst_dir, force_overwrite=False):
 
     for name in ["docker-compose.yml.j2", "nginx/nginx.conf.j2","nginx-certbot/nginx-certbot.conf.j2"]:
         template = env.get_template(name)
-        output_path = os.path.join(dst_dir, name.replace(".j2", ""))
+        output_name = name.replace(".j2", "")
+        output_path = os.path.join(dst_dir, output_name)
         rendered = template.render(context)
-        rendered_checksum = hashlib.sha256(rendered.encode()).hexdigest()
-
-        current_checksum = file_checksum(output_path)
-
-        if force_overwrite or current_checksum is None or current_checksum == rendered_checksum:
+    
+        if force_overwrite or is_dockncrypt_template(output_path):
             os.makedirs(os.path.dirname(output_path), exist_ok=True)
             with open(output_path, "w") as f:
                 f.write(rendered)
-            print(f"✅ Rendered {name.replace(".j2", "")}")
+            print(f"✅ Rendered {output_name}")
         else:
-            print(f"⚠️  Skipped {name.replace(".j2", "")} (user-modified, not overwriting)")
+            print(f"⚠️  Skipped {output_name} (user-modified, not overwriting)")

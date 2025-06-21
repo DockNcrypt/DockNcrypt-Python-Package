@@ -48,8 +48,8 @@ def clear_volumes():
 
 def edit_config():
     choice = input("🚨 Edit will not change particular file if any prior manual changes have been made.\n " \
-    "If you want to enable editing again for all run init\n " \
-    "do you wish to continue to edit? (y/n)")
+    "🚨 If you want to enable editing again for all run init\n " \
+    "do you wish to continue to edit? (y/n): ")
     if choice=='y':
         config = load_config()
         email = input(f"Enter email [{config['email']}]: ") or config["email"]
